@@ -6,7 +6,7 @@ library(DT)
 
 
 #Read in the built in datasets
-ceos = read.csv("CEOSC.csv",header=TRUE)  
+BikeSharing = read.csv("BikeSharing.csv",header=TRUE)  
 NHLdata = read.csv("NHLplayerdata1617.csv",header = TRUE)
 NHLdata = NHLdata[,-1]
 
@@ -35,8 +35,8 @@ shinyServer(function(input, output,session) {
   # if statements for which they chose and then if statements for type of file if they are inputing their own
   readDataM <- reactive({
     ds1 = dsM()
-    if (ds1 == "ceosal") {
-      datafile <- ceos
+    if (ds1 == "BikeSharing") {
+      datafile <- BikeSharing
     }
     else if(ds1 =="NHL"){
       datafile <-NHLdata
@@ -204,7 +204,7 @@ shinyServer(function(input, output,session) {
     A = matrix(c(x1,m1,x2,20,20,20), nrow = 3, ncol = 2)
     par(bg = "lightsteelblue")
     #Put the interval at arbritary y values and only display the x
-    plot(NULL,xlim = c(windx1,windx2),ylim = c(10,30),xlab = "X",type = 'l',ylab="",yaxt="n", main = "Interval")
+    plot(NULL,xlim = c(min(datafile[,vs1]),max(datafile[,vs1])),ylim = c(10,30),xlab = "X",type = 'l',ylab="",yaxt="n", main = "Interval")
     #axis(side=2, at=seq(10, 30, by=10))
     lines(A,lwd = 2.5)
     #This is the point for the mean of the data

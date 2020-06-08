@@ -25,9 +25,10 @@ dashboardPage(skin="blue",
                 width = 250,
                 sidebarMenu(id = "tabs",
                   
-                  menuItem("Overview", tabName = "over", icon = icon("dashboard")),
+                  menuItem("Overview", tabName = "over", icon = icon("tachometer-alt")),
                   menuItem("Choose a DataSet", tabName = "second", icon = icon("table")),
-                  menuItem("App", tabName = "third", icon = icon("wpexplorer"))
+                  menuItem("App", tabName = "third", icon = icon("wpexplorer")),
+                  menuItem("References", tabName = "refs", icon = icon("list-alt") )
                 )),
               
               #Content within the tabs
@@ -71,27 +72,16 @@ dashboardPage(skin="blue",
                               sidebarPanel(
                                 #Let them choose a preloaded dataset or input their own
                                 #If it is preloaded output some information about the dataset
-                                selectInput(inputId = "chooseM", "Select which data set you would like to use", choices = c("NHL Data" = "NHL","CEO Salaries" = "ceosal",InputYourOwn = "input")),
+                                selectInput(inputId = "chooseM", "Select which data set you would like to use", choices = c("NHL Data" = "NHL","Bike Sharing" = "BikeSharing",InputYourOwn = "input")),
                                 conditionalPanel("input.chooseM == 'NHL'",
                                                  "This data set was collected by statisticians working for the NHL over the course of the 2016-2017 NHL season. ",br(),br(),
                                                  "It is filtered to only include players who played at least half of the season (41 games). ",br(),br(),
-                                                 "There are 526 players in this set", br(),br(),
-                                                 "Player = Player's Name", br(),
-                                                 "GP = Games Played",br(),
-                                                 "G = Goals", br(),
-                                                 "A = Assists",br(),
-                                                 "PTS = Points",br(),
-                                                 "PIM = Penalties in Minutes", br(),
-                                                 "S = Shots on Goal", br(),
-                                                 "TOI = Time on Ice", br(),
-                                                 "BLK = Blocks at Even Strength",br(),
-                                                 "HIT = Hits at Even Strength", br(),
-                                                 "FOW = Faceoff Wins at Even Strength", br(),
-                                                 "FOL = Faceoff Losses at Even Strenth"
+                                                 "There are 526 players in this set"
                                 ),
-                                conditionalPanel("input.chooseM == 'ceosal'",
-                                                 "In 1994 Forbes collected CEO data on 'America's Best Small Companies'.",br(),br(),
-                                                 "Small companies were defined as those with annual sales greater than five and less than $350 million. Companies were ranked according to 5-year average return on investment. This data covers the first 60 ranked firms."
+                                conditionalPanel("input.chooseM == 'BikeSharing'",
+                                                 "This Dataset is about Capital Bikeshare program in Washington, D.C, during 2011 to 2012.",br(),br(),
+                                                 "Each row represent the data in an hour.",br(),br(),
+                                                 "There are 10,886 recorded in the dataset."
                                 ),
                                 conditionalPanel("input.chooseM == 'input'",
                                                  uiOutput("fileIncludeM"),
@@ -150,10 +140,25 @@ dashboardPage(skin="blue",
                             )
                             )
                           
-                  )
-                  
+                  ),
+                  tabItem(tabName = "refs",
+                          
+                          h2("References"),
+                          p(class = "hangingindent",
+                            "Fanaee-T, Hadi, and Gama, Joao, Event labeling combining ensemble detectors and background knowledge, Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg."),
+                          p(class = "hangingindent",
+                            "Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson (2020). shiny: Web Application Framework for R. R package version 1.4.0.2. https://CRAN.R-project.org/package=shiny"),
+                          p(class = "hangingindent",
+                            "Winston Chang and Barbara Borges Ribeiro (2018). shinydashboard: Create Dashboards with 'Shiny'. R package version 0.7.1. https://CRAN.R-project.org/package=shinydashboard"),
+                          p(class = "hangingindent",
+                            "H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016. https://ggplot2.tidyverse.org"),
+                          p(class = "hangingindent",
+                            "Yihui Xie, Joe Cheng and Xianying Tan (2020). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.13. https://CRAN.R-project.org/package=DT"),
+                          p(class = "hangingindent",
+                            "Eric Bailey (2015). shinyBS: Twitter Bootstrap Components for Shiny. R package version 0.61. https://CRAN.R-project.org/package=shinyBS")
                 )
               )
+)
 )
 
 
