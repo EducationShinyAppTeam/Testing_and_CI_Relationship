@@ -5,20 +5,16 @@ library(ggplot2)
 library(DT)
 library(shinyBS)
 
-#This was for trying to get a vetical slider
-# js<-"$(function() {
-#       var $elie = $(document.getElementsByClassName('form-group shiny-input-container'));
-# rotate(270);
-# function rotate(degree) {
-# $elie.css({ WebkitTransform: 'rotate(' + degree + 'deg)'});
-# $elie.css({ '-moz-transform': 'rotate(' + degree + 'deg)'});
-# }
-# });"
-
 dashboardPage(skin="blue",
               
               #Title
-              dashboardHeader(title="Testing and CI relationship", titleWidth = 250),
+              dashboardHeader(title="Testing and CI Relationship", 
+                              titleWidth = 250,
+                              tags$li(class = "dropdown", actionLink("info", icon("info"))),
+                              tags$li(class = "dropdown", 
+                                      tags$a(href='https://github.com/EducationShinyAppTeam/BOAST', icon("github"))),
+                              tags$li(class = "dropdown",
+                                      tags$a(href='https://shinyapps.science.psu.edu/', icon("home")))),
               
               #Sidebar
               dashboardSidebar(
@@ -26,15 +22,15 @@ dashboardPage(skin="blue",
                 sidebarMenu(id = "tabs",
                   
                   menuItem("Overview", tabName = "over", icon = icon("tachometer-alt")),
-                  menuItem("Choose a DataSet", tabName = "second", icon = icon("table")),
-                  menuItem("App", tabName = "third", icon = icon("wpexplorer")),
-                  menuItem("References", tabName = "refs", icon = icon("list-alt") )
+                  menuItem("Choose a DataSet", tabName = "explore1", icon = icon("table")),
+                  menuItem("Testing and CI Relationship", tabName = "explore2", icon = icon("wpexplorer")),
+                  menuItem("References", tabName = "refs", icon = icon("leanpub") )
                 )),
               
               #Content within the tabs
               dashboardBody(
                 tags$head(
-                  tags$link(rel = "stylesheet", type = "text/css", href = "Feature.css")
+                  tags$link(rel = "stylesheet", type = "text/css", href = "boast.css")
                 ),
                 tags$style(
                   type = "text/css",
@@ -43,11 +39,9 @@ dashboardPage(skin="blue",
                   }"
                 ),
                 tabItems(
-                  
                   tabItem(tabName = "over",
                           tags$a(href='http://stat.psu.edu/',tags$img(src='PS-HOR-RGB-2C.png', align = "left", width = 180)),
                           br(),br(),br(),
-                          
                           h3(strong("About:")),
                           h4("In this app you will explore how a significance test relates to a confidence interval."),
                           br(),
@@ -59,14 +53,12 @@ dashboardPage(skin="blue",
                           div(style = "text-align: center",bsButton("explore", "Explore", icon("bolt"), size = "large")),
                           br(),
                           h3(strong("Acknowledgements:")),
-                          h4("This app was developed and coded by David Robinson and Yingjie (Chelsea) Wang, and updated by Yubaihe Zhou.")
-                          
+                          h4("This app was developed and coded by David Robinson and Yingjie (Chelsea) Wang."),
+                          h4("This application was modified by Yubaihe Zhou."),
+                          h4("This application was modified by Gonghao Liu.")
                   ),
-                  tabItem(tabName = "second",
+                  tabItem(tabName = "explore1",
                           fluidPage(
-                            div(style="display: inline-block;vertical-align:top;",
-                                tags$a(href='https://shinyapps.science.psu.edu/',tags$img(src='homebut.PNG', width = 15))
-                            ),
                             titlePanel("Uploading Files"),
                             sidebarLayout(
                               sidebarPanel(
@@ -90,29 +82,22 @@ dashboardPage(skin="blue",
                                                                     '.xlsx', '.sas7bdat')),
                                                  checkboxInput('header', 'Header', TRUE)
                                 ) 
-                                # Only show this panel if the plot type is a histogram
-                                #uiOutput("varSelect")
-                                
                               ),
                               mainPanel(
                                 tabsetPanel(type = "tabs",
                                             tabPanel("Data Display",
                                                      dataTableOutput('displayM')
                                             ),
-                                            
                                             tabPanel("Data Summary",
                                                      verbatimTextOutput('summaryM'),
                                                      uiOutput("MissingNoticeM")
                                             )
+                                  )
                                 )
                               )
                             )
-                          )
                           ),
-                  tabItem(tabName = "third",
-                          div(style="display: inline-block;vertical-align:top;",
-                              tags$a(href='https://shinyapps.science.psu.edu/',tags$img(src='homebut.PNG', width = 15))
-                          ),
+                  tabItem(tabName = "explore2",
                           fluidRow(
                             withMathJax(),
                             column(4,
@@ -120,21 +105,19 @@ dashboardPage(skin="blue",
                                    uiOutput("var.selM"),
                                    uiOutput("size.selM"),
                                    uiOutput("null.selM"),
-                                   #numericInput(inputId = "nullM", "Set the null hypothesis (The population mean is equal to ___)", value = 0, min = 0, max = 10000),
                                    #use mu not equal to the null mean
-                                   radioButtons(inputId= "altM","Set the alternative hypothesis", choices = c("$$\\mu\\neq null mean$$ " = "choice1", "$$\\mu < null mean$$" = "choice2","$$\\mu > null mean$$" = "choice3")),
-                                   #selectInput(inputId = "alt", "Set the alternative hypothesis",choices = c("$$\\mu\\neq null mean$$ ", "$$\\mu < H_0$$",NotEqualH0 = "notEqual")),
+                                   radioButtons(inputId= "altM","Set the alternative hypothesis", choices = c("\\(\\mu\\neq\\text{null mean}\\)", "\\(\\mu<\\text{null mean}\\)","\\(\\mu>\\text{null mean}\\)")),
+
                                    tags$style(type = "text/css",
                                               "
                                               .irs-slider {width: 8px; height: 20px; top: 22px;}
                                               "),
-                                   sliderInput(inputId = "conflev1M","Select the Confidence level:",min = 0,max = 99,value = 95),
+                                   sliderInput(inputId = "conflev1M","Select the Confidence level:",min = 85,max = 100,value = 95),
                                    tableOutput("pvalueM")
-                                   #tags$head(tags$style("#pvalueM{color: blue;font-size: 30px;font-style: bold;}")),
                                    ),
                             column(8,
                                    plotOutput("plot.histM"),
-                                   h4("How does the interval relate to the p-value when you change the sample size, null mean, and confidence level."),
+                                   h4("How does the interval relate to the p-value when you change the sample size, null mean, and confidence level?"),
                                    plotOutput("plot.CIM")
                                    
                             )
@@ -142,20 +125,43 @@ dashboardPage(skin="blue",
                           
                   ),
                   tabItem(tabName = "refs",
-                          
+                          withMathJax(),
                           h2("References"),
-                          p(class = "hangingindent",
-                            "Fanaee-T, Hadi, and Gama, Joao, Event labeling combining ensemble detectors and background knowledge, Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg."),
-                          p(class = "hangingindent",
-                            "Winston Chang, Joe Cheng, JJ Allaire, Yihui Xie and Jonathan McPherson (2020). shiny: Web Application Framework for R. R package version 1.4.0.2. https://CRAN.R-project.org/package=shiny"),
-                          p(class = "hangingindent",
-                            "Winston Chang and Barbara Borges Ribeiro (2018). shinydashboard: Create Dashboards with 'Shiny'. R package version 0.7.1. https://CRAN.R-project.org/package=shinydashboard"),
-                          p(class = "hangingindent",
-                            "H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016. https://ggplot2.tidyverse.org"),
-                          p(class = "hangingindent",
-                            "Yihui Xie, Joe Cheng and Xianying Tan (2020). DT: A Wrapper of the JavaScript Library 'DataTables'. R package version 0.13. https://CRAN.R-project.org/package=DT"),
-                          p(class = "hangingindent",
-                            "Eric Bailey (2015). shinyBS: Twitter Bootstrap Components for Shiny. R package version 0.61. https://CRAN.R-project.org/package=shinyBS")
+                          p(
+                            class = "hangingindent",
+                            "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
+                             (v0.61). [R package]. Available from
+                            https://CRAN.R-project.org/package=shinyBS"
+                          ),
+                          p(
+                            class = "hangingindent",
+                            "Carey, R. (2019). boastUtils: BOAST Utilities. (v0.1.0).
+                             [R Package]. Available from
+                              https://github.com/EducationShinyAppTeam/boastUtils"
+                          ),
+                          p(
+                            class = "hangingindent",
+                            "Chang, W. and Borges Ribeio, B. (2018). shinydashboard: Create
+                             dashboards with 'Shiny'. (v0.7.1) [R Package]. Available from
+                             https://CRAN.R-project.org/package=shinydashboard"
+                          ),
+                          p(
+                            class = "hangingindent",
+                            "Chang, W., Cheng, J., Allaire, J., Xie, Y., and McPherson, J.
+                             (2019). shiny: Web application framework for R. (v1.4.0)
+                             [R Package]. Available from https://CRAN.R-project.org/package=shiny"
+                          ),
+                          p(
+                            class = "hangingindent",
+                            "Fanaee-T, Hadi, and Gama, Joao (2013). Progress in Artificial Intelligence. Available from
+                             https://www.kaggle.com/c/bike-sharing-demand/overview"
+                          ),
+                          p(
+                            class = "hangingindent",
+                            "Wickham, W. (2016). ggplot2: Elegant graphics for data analysis.
+                            [R Package]. Springer-Verlag New York. Available from
+                              https://ggplot2.tidyverse.org"
+                          )
                 )
               )
 )

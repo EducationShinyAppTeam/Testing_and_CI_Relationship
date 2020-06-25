@@ -1,8 +1,9 @@
 
 library(shiny)
 library(ggplot2)
-library(xlsx)
 library(DT)
+library(stringr) 
+library(openxlsx)
 
 
 #Read in the built in datasets
@@ -90,17 +91,6 @@ shinyServer(function(input, output,session) {
     vals1M$sample1 = datafile[sample(nrow(datafile),ss),] #random select samples
   })
   
-  
-  
-  
-  # vals2 <- reactiveValues(sample2 = 0)
-  # 
-  # observeEvent(input$choose, {
-  #   ss = input$size.sel1
-  #   datafile <-readData()
-  #   vals1$sample1 = datafile[sample(nrow(datafile),ss),]
-  # })
-  
   #data table of the data file the user chose
   output$displayM <- renderDataTable({
     datafile <- readDataM()
@@ -126,7 +116,17 @@ shinyServer(function(input, output,session) {
     datafile <- readDataM()
     items = names(datafile)
     names(items)=items
-    selectInput("var.sel1M", "Select Variable",items)
+    selectInput("var.sel1M", "Select Variable", choices = list("Games Played" = "Games.Played",
+                                                               "Goals" = "Goals",
+                                                               "Assists" = "Assists",
+                                                               "Points" = "Points",
+                                                               "Penalties in Minutes" = "Penalties.in.Minutes",
+                                                               "Shots on Goal" = "Shots.on.Goal",
+                                                               "Time on Ice" = "Time.on.Ice",
+                                                               "Blocks at Even Strength" = "Blocks.at.Even.Strength",
+                                                               "Hits at Even Strength" = "Hits.at.Even.Strength",
+                                                               "Faceoff Wins at Even Strength" = "Faceoff.Wins.at.Even.Strength",
+                                                               "Faceoff Losses at Even Strenth" = "Faceoff.Losses.at.Even.Strenth"))
   })
   
   # renderUI to have numeric input for the sample size where the max is the number of rows in the selected datafile
@@ -155,21 +155,25 @@ shinyServer(function(input, output,session) {
   output$plot.histM <- renderPlot({
     
     ss = input$size.sel1M
-    #datafile <-readDataM()
-    #datafile = datafile[sample(nrow(datafile),ss),]
     datafile <- vals1M$sample1 #random selected samples
     ds1 = dsM() #dataset that the user selected
-    vs1 = input$var.sel1M
+    vs1 = c(input$var.sel1M)
     par(bg = "lightsteelblue")
-    hist(datafile[,vs1],xlab = paste(vs1),main = paste(vs1), col = "firebrick")
+    vs2 = toString(vs1)
+    vs3 = str_replace_all(vs2, "\\.", " ") 
+    qplot(datafile[,vs1],
+          geom="histogram",
+          xlab = paste(vs3),
+          main = paste(vs3),
+          fill=I("lightblue"), 
+          col=I("black")
+        )+ theme(panel.background = element_rect(fill = 'white'))
   })
   
   #display the confidence interval of the variable/dataset that is selected
   output$plot.CIM <- renderPlot({
     alt1 = alt.testM()
     ss = input$size.sel1M
-    #datafile <-readDataM()
-    #datafile = datafile[sample(nrow(datafile),ss),]
     datafile <- vals1M$sample1
     #ds1 = dsM()
     ds1 = readDataM()
@@ -204,7 +208,19 @@ shinyServer(function(input, output,session) {
     A = matrix(c(x1,m1,x2,20,20,20), nrow = 3, ncol = 2)
     par(bg = "lightsteelblue")
     #Put the interval at arbritary y values and only display the x
-    plot(NULL,xlim = c(min(datafile[,vs1]),max(datafile[,vs1])),ylim = c(10,30),xlab = "X",type = 'l',ylab="",yaxt="n", main = "Interval")
+    par(bg = "white")
+    plot(NULL,
+         xlim = c(min(datafile[,vs1]),
+                  max(datafile[,vs1])),
+         ylim = c(10,30),
+         xlab = "X",
+         type = 'l',
+         ylab="",
+         yaxt="n", 
+         main = "Interval")
+    rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = 
+           "white")
+    
     #axis(side=2, at=seq(10, 30, by=10))
     lines(A,lwd = 2.5)
     #This is the point for the mean of the data
@@ -222,10 +238,8 @@ shinyServer(function(input, output,session) {
   output$pvalueM <- renderTable({
     alt1 = alt.testM()
     ss = input$size.sel1M
-    #datafile1 <-readDataM()
-    #datafile = datafile[sample(nrow(datafile),ss),]
-    datafile <- vals1M$sample1
    # ds1 = dsM()
+    datafile <- vals1M$sample1
     ds1 = readDataM()
     vs1 = input$var.sel1M
     h1 = hM()
@@ -260,6 +274,4 @@ shinyServer(function(input, output,session) {
     ctable
     
   })
-  
-  
 })
