@@ -1,15 +1,21 @@
 
 library(shiny)
 library(ggplot2)
-library(xlsx)
 library(DT)
-library("stringr")     
+library(stringr) 
+library(openxlsx)
+library(viridis)
 
 
 #Read in the built in datasets
 BikeSharing = read.csv("BikeSharing.csv",header=TRUE)  
 NHLdata = read.csv("NHLplayerdata1617.csv",header = TRUE)
 NHLdata = NHLdata[,-1]
+
+boastPalette <- c("#0072B2","#D55E00","#009E73","#CE77A8",
+                  "#000000","#E69F00","#999999","#56B4E9","#CC79A7")
+psuPalette <- c("#1E407C","#BC204B","#3EA39E","#E98300",
+                "#999999","#AC8DCE","#F2665E","#99CC00")
 
 shinyServer(function(input, output,session) {
   #Explore Button
@@ -115,8 +121,29 @@ shinyServer(function(input, output,session) {
   output$var.selM<- renderUI({
     datafile <- readDataM()
     items = names(datafile)
-    names(items)=items
-    selectInput("var.sel1M", "Select Variable",items)
+    #names(items)=items
+    if (input$chooseM == "Bike Sharing"){
+      selectInput("var.sel1M", "Select Variable", choices = list("Tempeture" = "Tempeture",
+                                                                 "Humidity" = "Humidity",
+                                                                 "Windspeed" = "Windspeed",
+                                                                 "Total Rental" = "Total Rental"))
+      }
+    else if (input$chooseM == "NHL"){
+      selectInput("var.sel1M", "Select Variable", choices = list("Games Played" = "Games.Played",
+                                                                 "Goals" = "Goals",
+                                                                 "Assists" = "Assists",
+                                                                 "Points" = "Points",
+                                                                 "Penalties in Minutes" = "Penalties.in.Minutes",
+                                                                 "Shots on Goal" = "Shots.on.Goal",
+                                                                 "Time on Ice" = "Time.on.Ice",
+                                                                 "Blocks at Even Strength" = "Blocks.at.Even.Strength",
+                                                                 "Hits at Even Strength" = "Hits.at.Even.Strength",
+                                                                 "Faceoff Wins at Even Strength" = "Faceoff.Wins.at.Even.Strength",
+                                                                 "Faceoff Losses at Even Strenth" = "Faceoff.Losses.at.Even.Strenth")
+      )}
+    else {
+      selectInput("var.sel1M", "Select Variable", items)
+    }
   })
   
   # renderUI to have numeric input for the sample size where the max is the number of rows in the selected datafile
@@ -155,9 +182,10 @@ shinyServer(function(input, output,session) {
           geom="histogram",
           xlab = paste(vs3),
           main = paste(vs3),
-          fill=I("lightblue"), 
-          col=I("black")
-        )+ theme(panel.background = element_rect(fill = 'white'))
+          col = I("black"),
+          fill = I("#AC8DCE")
+        ) + 
+      theme(panel.background = element_rect(fill = 'white'))
   })
   
   #display the confidence interval of the variable/dataset that is selected

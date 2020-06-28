@@ -5,7 +5,9 @@ library(ggplot2)
 library(DT)
 library(shinyBS)
 
-dashboardPage(skin="blue",
+boastPalette <- c("#AC8DCE")
+
+dashboardPage(skin="purple",
               
               #Title
               dashboardHeader(title="Testing and CI Relationship", 
@@ -20,17 +22,17 @@ dashboardPage(skin="blue",
               dashboardSidebar(
                 width = 250,
                 sidebarMenu(id = "tabs",
-                  
                   menuItem("Overview", tabName = "over", icon = icon("tachometer-alt")),
-                  menuItem("Choose a DataSet", tabName = "second", icon = icon("table")),
-                  menuItem("Testing and CI Relationship", tabName = "third", icon = icon("wpexplorer")),
-                  menuItem("References", tabName = "refs", icon = icon("leanpub") )
+                  menuItem("Choose a DataSet", tabName = "explore1", icon = icon("table")),
+                  menuItem("Testing and CI Relationship", tabName = "explore2", icon = icon("wpexplorer")),
+                  menuItem("References", tabName = "refs", icon = icon("leanpub"))),
+                tags$div(class = "sidebar-logo",boastUtils::psu_eberly_logo("reversed")
                 )),
               
               #Content within the tabs
               dashboardBody(
                 tags$head(
-                  tags$link(rel = "stylesheet", type = "text/css", href = "boast.css")
+                  tags$link(rel = "stylesheet", type = "text/css", href = "https://educationshinyappteam.github.io/Style_Guide/theme/boast.css")
                 ),
                 tags$style(
                   type = "text/css",
@@ -40,22 +42,28 @@ dashboardPage(skin="blue",
                 ),
                 tabItems(
                   tabItem(tabName = "over",
-                          tags$a(href='http://stat.psu.edu/',tags$img(src='PS-HOR-RGB-2C.png', align = "left", width = 180)),
-                          br(),br(),br(),
-                          h3(strong("About:")),
-                          h4("In this app you will explore how a significance test relates to a confidence interval."),
+                          fluidPage(
+                          h1(strong("Testing and Confidence Relationship:")),
+                          p("In this app you will explore how a significance test relates to a confidence interval."),
                           br(),
-                          h3(strong("Instructions:")),
-                          h4(tags$li("Choose one of the preloaded datasets or input your own.")),
-                          h4(tags$li("Go to the App and select the variable you would like to use. ")),
-                          h4(tags$li("Set the Sample Size, Null Hypothesis, Alternative Hyptohesis, and Confidence Level. ")),
-                          h4(tags$li("Follow the advice to explore the topic.")),
+                          h2(strong("Instructions:")),
+                          p(tags$li("Choose one of the preloaded datasets or input your own.")),
+                          p(tags$li("Go to the App and select the variable you would like to use. ")),
+                          p(tags$li("Set the Sample Size, Null Hypothesis, Alternative Hyptohesis, and Confidence Level. ")),
+                          p(tags$li("Follow the advice to explore the topic.")),
                           div(style = "text-align: center",bsButton("explore", "Explore", icon("bolt"), size = "large")),
                           br(),
-                          h3(strong("Acknowledgements:")),
-                          h4("This app was developed and coded by David Robinson and Yingjie (Chelsea) Wang, and updated by Yubaihe Zhou.")
+                          h2(strong("Acknowledgements:")),
+                          p("This app was developed and coded by David Robinson and Yingjie (Chelsea) Wang."),
+                          p("This application was modified by Yubaihe Zhou."),
+                          p("This application was modified by Gonghao Liu in 2020.",
+                            br(),
+                            br(),
+                            br(),
+                            div(class = "updated", "Last Update: 6/28/2020 by GL."))
+                  )
                   ),
-                  tabItem(tabName = "second",
+                  tabItem(tabName = "explore1",
                           fluidPage(
                             titlePanel("Uploading Files"),
                             sidebarLayout(
@@ -95,7 +103,7 @@ dashboardPage(skin="blue",
                               )
                             )
                           ),
-                  tabItem(tabName = "third",
+                  tabItem(tabName = "explore2",
                           fluidRow(
                             withMathJax(),
                             column(4,
@@ -110,7 +118,7 @@ dashboardPage(skin="blue",
                                               "
                                               .irs-slider {width: 8px; height: 20px; top: 22px;}
                                               "),
-                                   sliderInput(inputId = "conflev1M","Select the Confidence level:",min = 85,max = 100,value = 95),
+                                   sliderInput(inputId = "conflev1M","Select the Confidence level (%):",min = 85,max = 99,value = 95),
                                    tableOutput("pvalueM")
                                    ),
                             column(8,
