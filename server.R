@@ -20,7 +20,7 @@ psuPalette <- c("#1E407C","#BC204B","#3EA39E","#E98300",
 shinyServer(function(input, output,session) {
   #Explore Button
   observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "second")
+    updateTabItems(session, "tabs", "explore2")
   })
   #Means Test
   #reactive for how the user chooses the dataset they want to use
