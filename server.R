@@ -121,12 +121,11 @@ shinyServer(function(input, output,session) {
   output$var.selM<- renderUI({
     datafile <- readDataM()
     items = names(datafile)
-    #names(items)=items
-    if (input$chooseM == "Bike Sharing"){
+    if (input$chooseM == "BikeSharing"){
       selectInput("var.sel1M", "Select Variable", choices = list("Tempeture" = "Tempeture",
                                                                  "Humidity" = "Humidity",
                                                                  "Windspeed" = "Windspeed",
-                                                                 "Total Rental" = "Total Rental"))
+                                                                 "Total Rental" = "Total.Rental"))
       }
     else if (input$chooseM == "NHL"){
       selectInput("var.sel1M", "Select Variable", choices = list("Games Played" = "Games.Played",
@@ -150,8 +149,8 @@ shinyServer(function(input, output,session) {
   output$size.selM <- renderUI({
     datafile <- readDataM()
     max1 = nrow(datafile)
-    max2 = 0.5*max1
-    sliderInput("size.sel1M","Select a sample size", min = 3 , max = max2, val = 30)
+    max2 = 200
+    sliderInput("size.sel1M","Select a sample size", min = 30 , max = max2, val = 100)
   })
   
   output$null.selM <- renderUI({
@@ -227,11 +226,14 @@ shinyServer(function(input, output,session) {
     par(bg = "lightsteelblue")
     #Put the interval at arbritary y values and only display the x
     par(bg = "white")
+    vs1 = c(input$var.sel1M)
+    vs2 = toString(vs1)
+    vs3 = str_replace_all(vs2, "\\.", " ") 
     plot(NULL,
          xlim = c(min(datafile[,vs1]),
                   max(datafile[,vs1])),
          ylim = c(10,30),
-         xlab = "X",
+         xlab = paste(vs3),
          type = 'l',
          ylab="",
          yaxt="n", 
