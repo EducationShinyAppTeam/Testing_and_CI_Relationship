@@ -1,4 +1,4 @@
-Tempeture,Humidity,Windspeed,Total Rental
+Temperature(°C),Humidity,Windspeed(km/h),Total Rental
 9.84,81,0,16
 9.02,80,0,40
 9.02,80,0,32
