@@ -4,10 +4,11 @@ library(ggplot2)
 library(DT)
 library(DescTools)
 library(english)
+library(shinyWidgets)
 
 # Read in the data sets ----
-bikeSharing <- read.csv("bikeSharing.csv", header=TRUE)
-NHLdata <- read.csv("NHLplayerdata1617.csv", header = TRUE)
+bikeSharing <- read.csv("BikeSharing.csv", header=TRUE, stringsAsFactors=FALSE, fileEncoding="latin1")
+NHLdata <- read.csv("NHLplayerdata1617.csv", header = TRUE, stringsAsFactors=FALSE, fileEncoding="latin1")
 
 # Define color palettes ----
 boastPalette <- c("#0072B2","#D55E00","#009E73","#CE77A8",
