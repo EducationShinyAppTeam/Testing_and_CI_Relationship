@@ -21,7 +21,7 @@ psuPalette <- c("#1E407C","#BC204B","#3EA39E","#E98300",
 shinyServer(function(input, output,session) {
   ## Explore Button ----
   observeEvent(input$explore, {
-    updateTabItems(session, "tabs", "explore2")
+    updateTabItems(session, "pages", "explore2")
   })
 
   ## The information button ----

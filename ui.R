@@ -13,13 +13,19 @@ dashboardPage(
     titleWidth = 250,
     tags$li(class = "dropdown", actionLink("info", icon("info"))),
     tags$li(class = "dropdown",
-            tags$a(href='https://shinyapps.science.psu.edu/', icon("home")))
+            tags$a(href='https://shinyapps.science.psu.edu/', icon("home"))),
+    tags$li(
+      class = "dropdown",
+      tags$a(target = "_blank", icon("comments"),
+             href = "https://pennstate.qualtrics.com/jfe/form/SV_7TLIkFtJEJ7fEPz?appName=[Testing and CI Relationship]"
+      )
+    )
   ),
   # Sidebar ----
   dashboardSidebar(
     width = 250,
     sidebarMenu(
-      id = "tabs",
+      id = "pages",
       menuItem("Overview", tabName = "over", icon = icon("tachometer-alt")),
       menuItem("Testing and CI Relationship", tabName = "explore2",
                icon = icon("wpexplorer")),
