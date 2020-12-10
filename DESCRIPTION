@@ -1,0 +1,27 @@
+Title: The Relationship Between Null Hypothesis Significance Testing and Confidence Intervals
+ShortName: NHST and CIs
+Date: 2020-12-10
+Lifecycle: maturing
+Authors@R: c(
+    person(given = "David", family = "Robinson", role = c("aut", "cre")),
+    person(given = "Yingjie (Chelsea)", family = "Wang", role = c("aut", "cre")),
+    person(given = "Yubaihe", family = "Zhou", role = c("ctb")),
+    person(given = "Gonghao", family = "Liu", role = c("aut")),
+    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut"))
+  )
+Chapter: Chapter 4
+Description: In this app you will explore how a significance test relates to a confidence interval.
+LearningObjectives: c(
+    "The student will learn that the alternative hypothesis dictates the type of
+    confidence interval created.",
+    "The student will learn that when the p-value is smaller than the significance
+    level, the null value falls outside of the confidence interval.",
+    "The student will learn that increasing the confidence level will increase 
+    the width of the interval."
+  )
+DisplayMode: Normal
+URL: https://psu-eberly.shinyapps.io/Testing_and_CI_Relationship
+BugReports: https://github.com/EducationShinyAppTeam/Testing_and_CI_Relationship/issues
+License: CC-BY-NC-SA-4.0
+Tags: real data, simulation
+Type: Shiny
