@@ -455,7 +455,7 @@ server <- function(input, output,session) {
 
   ## Run the Z Test ----
   zTest <- eventReactive(
-    eventExpr = c(input$selectedVar, sampledData()),
+    eventExpr = c(input$selectedVar, sampledData(), input$nullValue),
     valueExpr = {
       nhst <- DescTools::ZTest(
         x = sampledData()$x,
